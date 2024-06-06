@@ -19,7 +19,7 @@ struct ExampleSite: Site {
     var baseTitle = ""
     var url = URL("https://www.example.com")
     var builtInIconsEnabled = true
-    var pageWidth = 12
+    var pageWidth = 8
 
     var author = "Mark Stamer"
 

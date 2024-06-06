@@ -8,24 +8,17 @@ struct MyTheme: Theme {
 
             Body {
                 NavigationBar(logo: Text("").font(.title1)) {
-                    Link("about", target: "/")
-                    Link("work", target: "#")
-                    Link("exploration", target: "#")
-                    Link("articles", target: "#")
+                    Link(Text("about").font(.lead), target: "/")
+                    Link(Text("work").font(.lead), target: "#")
+                    Link(Text("exploration").font(.lead), target: "#")
+                    Link(Text("articles").font(.lead), target: "#")
                 }
-                .width(10)
                 .navigationItemAlignment(.trailing)
                 .navigationBarStyle(.light)
                 .background(.white.opacity(0.25))
-                .shadow(radius: 1)
                 .position(.default)
 
                 page.body
-                    .backgroundImage(
-                        "/images/Swift_logo_white.svg",
-                        size: .fill,
-                        position: .bottom // .topLeft(.percent(100), nil),
-                    )
 
                 IgniteFooter()
             }

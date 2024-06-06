@@ -5,45 +5,15 @@ struct Home: StaticPage {
     var title = "Home"
 
     func body(context: PublishingContext) -> [BlockElement] {
-        Spacer(size: .extraLarge)
+        Spacer(size: .large)
 
         profileSection
             .frame(maxWidth: .containerWidth(.large))
 
-        Spacer(size: .extraLarge)
+        Spacer(size: .large)
 
-        Section {
-            Card {
-                Text("I followw")
-                    .font(.title5)
-
-                Text("Paul Hudson, Janum Trivedi, Majid Jabrayilov")
-            }
-            .cardStyle(.default)
-            .role(.light)
-            .width(4)
-
-            Card {
-                Text("I know")
-                    .font(.title5)
-
-                Text("Swift, SwiftUI, async/await, Combine")
-            }
-//            .cardStyle(.default)
-//            .role(.light)
-            .width(4)
-
-//            Card {
-//                Text("I know")
-//                    .font(.title5)
-//
-//                Text("Swift, SwiftUI, async/await, Combine")
-//            }
-//            .cardStyle(.default)
-//            .role(.light)
-//            .width(4)
-        }
-        .frame(maxWidth: .containerWidth(.large))
+        tagSection
+            .frame(maxWidth: .containerWidth(.large))
     }
 
     var profileSection: Section {
@@ -51,16 +21,18 @@ struct Home: StaticPage {
             introText
                 .frame(maxWidth: .containerWidth(.medium))
                 .width(8)
+                .margin(.bottom, .extraLarge)
 
             Group {
                 profileImage
                 Spacer(size: .large)
                 socials
             }
-            .width(4)
             .horizontalAlignment(.center)
+            .frame(maxWidth: 250)
+            .width(4)
         }
-        .verticalContainerAlignment(.center)
+        .verticalContainerAlignment(.top)
     }
 
     var introText: some BlockElement {
@@ -76,7 +48,7 @@ struct Home: StaticPage {
             .fontWeight(.regular)
             .margin(.bottom, .large)
 
-            Text("iOS Developer | SwiftUI Enthusiast | PhD, Medical Engineering")
+            Text("iOS Developer | SwiftUI Enthusiast | PhD in Medical Engineering")
                 .foregroundStyle(.secondary)
                 .font(.title4)
                 .fontWeight(.light)
@@ -93,13 +65,12 @@ struct Home: StaticPage {
 
     var profileImage: some BlockElement {
         Group {
-            Image("/images/Profile.jpeg")
+            Image("/images/Profile-close.jpeg")
                 .resizable()
                 .class("object-fit-cover") // Make image aspect fill
                 .cornerRadius(8) // Make a circular image by using "50%"
         }
         .aspectRatio(.square)
-        .frame(maxWidth: 250)
     }
 
     var socials: some BlockElement {
@@ -116,6 +87,65 @@ struct Home: StaticPage {
                 .padding(.small)
         }
         .font(.title3)
+    }
+
+    var tagSection: Section {
+        Section {
+            Card {
+                Text("Field Experience")
+                    .font(.title5)
+
+                var badges = ["Urban Mobility", "Medical Engineering", "Coral Restoration"]
+
+                Text {
+                    for badge in badges {
+                        Badge(badge)
+                            .badgeStyle(.subtleBordered).role(.primary)
+                            .margin([.top, .trailing], .small)
+                    }
+                }
+                .font(.body)
+            }
+            .style("border: none")
+            .width(4)
+
+
+            Card {
+                Text("Knowledge")
+                    .font(.title5)
+
+                var badges = ["Swift", "SwiftUI", "UIKit", "async/await", "Combine", "MapKit", "SwiftPM", "SwiftGen"]
+
+                Text {
+                    for badge in badges {
+                        Badge(badge)
+                            .badgeStyle(.subtleBordered).role(.secondary)
+                            .margin([.top, .trailing], .small)
+                    }
+                }
+                .font(.body)
+            }
+            .style("border: none")
+            .width(4)
+
+            Card {
+                Text("Following")
+                    .font(.title5)
+
+                var badges = ["Paul Hudson", "Janum Trivedi", "Majid Jabrayilov", "Javier (swiftui-lab)", "Sarun W.", "John Sundell", "Soroush Khanlou"].shuffled()
+
+                Text {
+                    for badge in badges {
+                        Badge(badge)
+                            .badgeStyle(.subtleBordered).role(.warning)
+                            .margin([.top, .trailing], .small)
+                    }
+                }
+                .font(.body)
+            }
+            .style("border: none")
+            .width(4)
+        }
     }
 }
 
