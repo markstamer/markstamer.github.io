@@ -20,8 +20,7 @@ struct Home: StaticPage {
         Section {
             introText
                 .frame(maxWidth: .containerWidth(.medium))
-                .width(8)
-                .margin(.bottom, .extraLarge)
+                .width(9)
 
             Group {
                 profileImage
@@ -29,37 +28,30 @@ struct Home: StaticPage {
                 socials
             }
             .horizontalAlignment(.center)
-            .frame(maxWidth: 250)
-            .width(4)
+            .frame(maxWidth: 140)
+            .margin(.top, .large)
+            .width(3)
         }
         .verticalContainerAlignment(.top)
     }
 
     var introText: some BlockElement {
         Group {
-            Text {
-                Image(decorative: "/images/Swift_logo_color.svg")
-                    .resizable()
-                    .frame(height: "1.1em")
-                    .verticalAlignment(.textBottom)
-                " Hi, I'm Mark Stamer"
-            }
-            .font(.title1)
-            .fontWeight(.regular)
-            .margin(.bottom, .large)
-
-            Text("iOS Developer | SwiftUI Enthusiast | PhD in Medical Engineering")
-                .foregroundStyle(.secondary)
-                .font(.title4)
+            Text("Hi, I'm Mark!")
+                .font(.title2)
                 .fontWeight(.light)
                 .margin(.bottom, .large)
 
-            Text {
-                "I'm a native iOS developer from Germany who thrives on the idea of using the iPhone as a canvas for my coding skills. I enjoy diving into new technologies at an early stage to gain a deep understanding of their workings and potential. Before discovering my passion for software development, I pursued a career in Medical Engineering."
-            }
-            .foregroundStyle(.secondary)
-            .font(.lead)
-            .fontWeight(.light)
+            Text("iOS Developer | SwiftUI Enthusiast | Medical Engineering PhD")
+                .foregroundStyle(.secondary)
+                .font(.title5)
+                .fontWeight(.regular)
+                .margin(.bottom, .large)
+
+            Text("I'm a native iOS developer from Hamburg, Germany. I enjoy writing Swift code and delighful user interfaces with SwiftUI. I'm curious about new technologies and start tinkering with them early on to get a feel for their potential. Before discovering my passion for software development, I pursued a career in Medical Engineering.")
+                .foregroundStyle(.secondary)
+                .font(.lead)
+                .fontWeight(.light)
         }
     }
 
@@ -77,8 +69,8 @@ struct Home: StaticPage {
         Text {
             Link(Image(systemName: "linkedin"), target: "https://www.linkedin.com/in/mark-stamer/")
                 .role(.secondary)
-                .padding(.vertical, .small)
-                .padding(.trailing, .small)
+                .padding(.small)
+//                .padding(.trailing, .small)
             Link(Image(systemName: "github"), target: "https://github.com/markstamer/")
                 .role(.secondary)
                 .padding(.small)
@@ -91,60 +83,27 @@ struct Home: StaticPage {
 
     var tagSection: Section {
         Section {
-            Card {
-                Text("Field Experience")
-                    .font(.title5)
+            Card.badgeCard(
+                title: "Field Experience",
+                badges: ["Urban Mobility", "Coral Restoration", "Medical Engineering"],
+                role: .primary
+            )
+            .width(3)
 
-                var badges = ["Urban Mobility", "Medical Engineering", "Coral Restoration"]
 
-                Text {
-                    for badge in badges {
-                        Badge(badge)
-                            .badgeStyle(.subtleBordered).role(.primary)
-                            .margin([.top, .trailing], .small)
-                    }
-                }
-                .font(.body)
-            }
-            .style("border: none")
+            Card.badgeCard(
+                title: "Knowledge",
+                badges: ["Swift", "SwiftUI", "UIKit", "async / await", "Combine", "MapKit", "SwiftPM", "SwiftGen"],
+                role: .warning
+            )
             .width(4)
 
-
-            Card {
-                Text("Knowledge")
-                    .font(.title5)
-
-                var badges = ["Swift", "SwiftUI", "UIKit", "async/await", "Combine", "MapKit", "SwiftPM", "SwiftGen"]
-
-                Text {
-                    for badge in badges {
-                        Badge(badge)
-                            .badgeStyle(.subtleBordered).role(.secondary)
-                            .margin([.top, .trailing], .small)
-                    }
-                }
-                .font(.body)
-            }
-            .style("border: none")
-            .width(4)
-
-            Card {
-                Text("Following")
-                    .font(.title5)
-
-                var badges = ["Paul Hudson", "Janum Trivedi", "Majid Jabrayilov", "Javier (swiftui-lab)", "Sarun W.", "John Sundell", "Soroush Khanlou"].shuffled()
-
-                Text {
-                    for badge in badges {
-                        Badge(badge)
-                            .badgeStyle(.subtleBordered).role(.warning)
-                            .margin([.top, .trailing], .small)
-                    }
-                }
-                .font(.body)
-            }
-            .style("border: none")
-            .width(4)
+            Card.badgeCard(
+                title: "Favorite Creators",
+                badges: ["Majid Jabrayilov", "Paul Hudson", "Chris Eidhof", "Javier (swiftui-lab)", "Sarun W.", "John Sundell", "Soroush Khanlou", "Janum Trivedi"],
+                role: .secondary
+            )
+            .width(5)
         }
     }
 }
@@ -155,10 +114,20 @@ extension Group {
     }
 }
 
-extension Group {
-    static func card(title: String, description: String, image: String) -> Group {
-        Group {
-            
+extension Card {
+    static func badgeCard(title: String, badges: [String], role: Role) -> Card {
+        Card {
+            Text(title)
+                .font(.title5)
+            Text {
+                for badge in badges {
+                    Badge(badge)
+                        .badgeStyle(.subtleBordered).role(role)
+                        .margin([.top, .trailing], .small)
+                }
+            }
+            .font(.body)
         }
+        .style("border: none")
     }
 }
