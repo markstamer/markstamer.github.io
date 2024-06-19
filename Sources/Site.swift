@@ -17,9 +17,9 @@ struct IgniteWebsite {
 struct ExampleSite: Site {    
     var name = "Mark Stamer"
     var baseTitle = ""
-    var url = URL("https://www.example.com")
+    var url = URL(string: "https://www.example.com")!
     var builtInIconsEnabled = true
-    var pageWidth = 8
+    var pageWidth = 12
 
     var author = "Mark Stamer"
 

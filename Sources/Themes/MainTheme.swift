@@ -15,8 +15,8 @@ struct MyTheme: Theme {
                 }
                 .navigationItemAlignment(.trailing)
                 .navigationBarStyle(.light)
-                .background(.white.opacity(0.25))
                 .position(.default)
+                .frame(maxWidth: .containerWidth(.large))
 
                 page.body
 
