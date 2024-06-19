@@ -31,12 +31,16 @@ extension Card {
             }
 
             Modal(id: "ModalImageLarge") {
-                Button {
-                    DismissModal(id: "ModalImageLarge")
-                } label: { }
-                .role(.close)
+                Group {
+                    Image(systemName: "x-lg")
+                        .resizable()
+                        .frame(width: 32, height: 32)
+                }
                 .class("position-absolute top-0 end-0")
-                .margin(.medium)
+                .margin(.large)
+                .onClick {
+                    DismissModal(id: "ModalImageLarge")
+                }
 
                 Image(decorative: image)
                     .resizable()
