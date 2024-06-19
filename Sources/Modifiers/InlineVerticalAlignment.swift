@@ -30,6 +30,7 @@ public enum InlineVerticalAlignment {
     /// Moves the element by a specified length in pixel or percent e.g. 10px, 10%.
     case offset(String)
 
+    /// The HTML name for the alignment.
     var htmlName: String {
         switch self {
         case .baseline:

@@ -2,6 +2,8 @@ import Foundation
 
 /// The width of the container in pixel
 enum ContainerWidth: Int {
+    case xxs = 240
+    case xs = 360
     case small = 540
     case medium = 720
     case large = 960
