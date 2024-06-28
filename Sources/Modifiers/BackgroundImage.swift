@@ -109,10 +109,13 @@ public struct BackgroundPosition {
 
     /// Positions the element at the top left with a corresponding optional offset
     public static func topLeft(_ firstOffset: Offset?, _ secondOffset: Offset?) -> Self { .init(.top, firstOffset, .left, secondOffset) }
+    
     /// Positions the element at the top right with a corresponding optional offset
     public static func topRight(_ firstOffset: Offset?, _ secondOffset: Offset?) -> Self { .init(.top, firstOffset, .right, secondOffset)}
+    
     /// Positions the element on the bottom left with a corresponding optional offset
     public static func bottomLeft(_ firstOffset: Offset?, _ secondOffset: Offset?) -> Self { .init(.bottom, firstOffset, .left, secondOffset)}
+    
     /// Positions the element on the bottom right with a corresponding optional offset
     public static func bottomRight(_ firstOffset: Offset?, _ secondOffset: Offset?) -> Self { .init(.bottom, firstOffset, .right, secondOffset)}
 
