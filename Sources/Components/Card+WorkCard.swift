@@ -10,12 +10,12 @@ extension Card {
 
                     Text(description)
                 }
-                .width(7)
+                .width(6)
 
                 Image(decorative: image)
                     .resizable()
                     .frame(minWidth: .containerWidth(.xxs))
-                    .background(.black.opacity(0.03))
+                    .background(.black.opacity(0.02))
                     .cornerRadius(6)
                     .onHover { isHovering in
                         if isHovering {
@@ -27,7 +27,7 @@ extension Card {
                     .onClick {
                         ShowModal(id: image)
                     }
-                    .width(5)
+                    .width(6)
             }
             
             Modal(id: image) {
