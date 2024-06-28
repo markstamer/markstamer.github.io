@@ -10,7 +10,7 @@ extension Card {
 
                     Text(description)
                 }
-                .frame(minWidth: .containerWidth(.small), alignment: .leading)
+                .width(7)
 
                 Image(decorative: image)
                     .resizable()
@@ -25,12 +25,12 @@ extension Card {
                         }
                     }
                     .onClick {
-                        ShowModal(id: "ModalImageLarge")
+                        ShowModal(id: image)
                     }
-
+                    .width(5)
             }
-
-            Modal(id: "ModalImageLarge") {
+            
+            Modal(id: image) {
                 Group {
                     Image(systemName: "x-lg")
                         .resizable()
@@ -39,7 +39,7 @@ extension Card {
                 .class("position-absolute top-0 end-0")
                 .margin(.large)
                 .onClick {
-                    DismissModal(id: "ModalImageLarge")
+                    DismissModal(id: image)
                 }
 
                 Image(decorative: image)
@@ -50,7 +50,7 @@ extension Card {
             .size(.large)
 
             Group {
-                Text("Key Features")
+                Text("Key Contributions")
                     .font(.lead)
                     .fontWeight(.medium)
 
@@ -59,7 +59,9 @@ extension Card {
             }.padding(.top, .medium)
 
             Group {
-                Text("Tech stack").font(.lead).fontWeight(.medium)
+                Text("Tech stack")
+                    .font(.lead)
+                    .fontWeight(.medium)
                 Text {
                     for badge in techBadges {
                         Badge(badge)
@@ -69,6 +71,7 @@ extension Card {
                 }
                 .font(.body)
             }
+            .frame(maxWidth: .containerWidth(.small), alignment: .leading)
         }
         .style("border: none")
         .background(.white.opacity(0))
