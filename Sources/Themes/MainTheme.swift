@@ -8,8 +8,7 @@ struct MyTheme: Theme {
 
             Body {
                 NavigationBar(logo: Text("").font(.title1)) {
-                    Link(Text("about").font(.lead), target: "/")
-                    Link(Text("work").font(.lead), target: "#")
+                    Link(Text("work").font(.lead), target: "#WorkSection")
                     Link(Text("exploration").font(.lead), target: "#")
                     Link(Text("articles").font(.lead), target: "#")
                 }

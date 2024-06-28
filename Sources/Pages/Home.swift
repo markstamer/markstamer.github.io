@@ -9,19 +9,18 @@ struct Home: StaticPage {
 
         profileSection
             .frame(maxWidth: .containerWidth(.large))
-            .margin(.top, "50px")
 
         Spacer(size: .extraLarge)
 
         tagSection
             .frame(maxWidth: .containerWidth(.large))
-            .margin(.top, "100px")
 
         Spacer(size: .extraLarge)
 
         workSection
             .frame(maxWidth: .containerWidth(.large))
-            .margin(.top, "100px")
+            .margin(.top, "80px")
+            .id("WorkSection")
 
     }
 }
