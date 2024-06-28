@@ -53,15 +53,18 @@ extension Home {
 
     fileprivate var socials: some BlockElement {
         Text {
-            Link(Image(systemName: "linkedin"), target: "https://www.linkedin.com/in/mark-stamer/")
-                .role(.secondary)
-                .padding(.small)
-            Link(Image(systemName: "github"), target: "https://github.com/markstamer/")
-                .role(.secondary)
-                .padding(.small)
-            Link(Image(systemName: "twitter"), target: "https://x.com/mIaIrIk")
-                .role(.secondary)
-                .padding(.small)
+            let socials: [(image: String, target: String)] = [
+                ("linkedin", "https://www.linkedin.com/in/mark-stamer/"),
+                ("github", "https://github.com/markstamer/"),
+                ("twitter", "https://x.com/mIaIrIk")
+            ]
+
+            for social in socials {
+                Link(Image(systemName: social.image), target: social.target)
+                    .role(.secondary)
+                    .padding(.small)
+                    .relationship(.noOpener, .noReferrer)
+            }
         }
         .font(.title3)
     }
