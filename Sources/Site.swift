@@ -18,13 +18,17 @@ struct ExampleSite: Site {
     var name = "Mark Stamer"
     var baseTitle = ""
     var url = URL(string: "https://www.example.com")!
-    var builtInIconsEnabled = true
+
     var pageWidth = 12
+    var builtInIconsEnabled = true
 
-    var author = "Mark Stamer"
-
+    var syntaxHighlighters = [SyntaxHighlighter.swift]
     var homePage = Home()
     var theme = MyTheme()
+
+    var layouts: [any ContentPage] = [
+        Article()
+    ]
 }
 
 

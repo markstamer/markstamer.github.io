@@ -10,7 +10,7 @@ struct MyTheme: Theme {
                 NavigationBar(logo: Text("").font(.title1)) {
                     Link(Text("work").font(.lead), target: "#WorkSection")
                     Link(Text("exploration").font(.lead), target: "#")
-                    Link(Text("articles").font(.lead), target: "#")
+                    Link(Text("articles").font(.lead), target: "#ArticleSection")
                 }
                 .navigationItemAlignment(.trailing)
                 .navigationBarStyle(.light)

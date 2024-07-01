@@ -22,6 +22,11 @@ struct Home: StaticPage {
             .margin(.top, "80px")
             .id("WorkSection")
 
+        articleSection(context.allContent)
+            .frame(maxWidth: .containerWidth(.large))
+            .margin(.top, "80px")
+            .id("ArticleSection")
+
     }
 }
 struct ShowBoxShadow: Action {
