@@ -13,7 +13,7 @@ When I first saw async/await Swift code, I was amazed at how elegant and concise
 
 Before we get into the weeds, let’s briefly recap how cancellation in Swift concurrency works. The [Swift Programming Language](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/) book states that Swift concurrency uses a cooperative cancellation model. This means that although all child tasks will be informed when their parent task has been canceled, they still continue to run. A task can check whether it has been canceled by either calling `try Task.checkCancellation()`, which raises a `CancellationError`, or by checking the value of `Task.isCanceled` to return a partial result or a fallback value. Lastly, a task can be canceled by calling the `cancel()` method on it.
 
-> > NOTE: With URLSession's asynchronous APIs, it is not necessary to check for cancellation since a `URLError` with the code `canceled` will be thrown.
+> NOTE: With URLSession's asynchronous APIs, it is not necessary to check for cancellation since a `URLError` with the code `canceled` will be thrown.
 
 ### Task cancellation
 

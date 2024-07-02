@@ -3,24 +3,39 @@ import Ignite
 
 struct Article: ContentPage {
     func body(content: Content, context: PublishingContext) -> [any BlockElement] {
-        Section {
+        Group {
             Text(content.title)
                 .font(.title1)
+
+            Text {
+                for tag in content.tags {
+                    Badge(tag)
+                        .role(.success)
+                        .badgeStyle(.subtle)
+                        .verticalAlignment(.center)
+                        .margin(.bottom, 4)
+                }
+
+                Image(systemName: "dot")
+                    .padding(.horizontal, .small)
+
+                content.date.formatted(date: .abbreviated, time: .omitted)
+
+                Image(systemName: "dot")
+                    .padding(.horizontal, .small)
+
+                "\(content.estimatedReadingMinutes) min read"
+            }
+            .font(.title5)
+            .fontWeight(.light)
+            .padding(.vertical, .medium)
 
             if let image = content.image {
                 Image(image, description: content.imageDescription)
                     .resizable()
                     .cornerRadius(20)
-                    .frame(maxHeight: 300)
-                    .horizontalAlignment(.center)
-            }
-
-            Group {
-                if content.hasTags {
-                    Text("Tagged with: \(content.tags.joined(separator: ", "))")
-                }
-
-                Text("\(content.estimatedWordCount) words; \(content.estimatedReadingMinutes) minutes to read.")
+                    .aspectRation(3.5, contentMode: .fill)
+                    .padding(.vertical, .medium)
             }
 
             Text(content.body)
