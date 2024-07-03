@@ -42,13 +42,10 @@ extension Home {
     }
 
     fileprivate var profileImage: some BlockElement {
-        Group {
             Image(decorative: "/images/Profile-close.jpeg")
                 .resizable()
-                .class("object-fit-cover") // Make image aspect fill
-                .cornerRadius(8) // Make a circular image by using "50%"
-        }
-        .aspectRatio(.square)
+                .cornerRadius(8)
+                .aspectRation(.square, contentMode: .fill)
     }
 
     fileprivate var socials: some BlockElement {
@@ -67,5 +64,33 @@ extension Home {
             }
         }
         .font(.title3)
+    }
+}
+
+enum ContentMode {
+    case fit, fill
+
+    var htmlClass: String {
+        "object-fit-\(self == .fill ? "cover" : "contain")"
+    }
+}
+
+protocol MediaContent: BlockElement { }
+extension Image: MediaContent { }
+extension Video: MediaContent { }
+
+extension MediaContent {
+    func aspectRation(_ ratio: AspectRatio, contentMode: ContentMode) -> some BlockElement {
+        Group {
+            self.class(contentMode.htmlClass)
+        }
+        .aspectRatio(ratio)
+    }
+
+    func aspectRation(_ ratio: Double, contentMode: ContentMode) -> some BlockElement {
+        Group {
+            self.class(contentMode.htmlClass)
+        }
+        .aspectRatio(ratio)
     }
 }

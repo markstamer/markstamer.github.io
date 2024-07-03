@@ -3,6 +3,7 @@ author: Mark Stamer
 layout: Article
 tags: async/await
 image: /images/articles/AnyCancellable.jpeg
+externalLink: Medium https://medium.com/mobimeo-technology/effective-task-cancellation-in-swift-by-leveraging-combines-anycancellable-7814b50fc8c8
 date: 2023-06-23 9:30
 ---
 # Effective Task cancellation in Swift by leveraging Combine’s AnyCancellable
@@ -13,7 +14,7 @@ When I first saw async/await Swift code, I was amazed at how elegant and concise
 
 Before we get into the weeds, let’s briefly recap how cancellation in Swift concurrency works. The [Swift Programming Language](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/) book states that Swift concurrency uses a cooperative cancellation model. This means that although all child tasks will be informed when their parent task has been canceled, they still continue to run. A task can check whether it has been canceled by either calling `try Task.checkCancellation()`, which raises a `CancellationError`, or by checking the value of `Task.isCanceled` to return a partial result or a fallback value. Lastly, a task can be canceled by calling the `cancel()` method on it.
 
-> NOTE: With URLSession's asynchronous APIs, it is not necessary to check for cancellation since a `URLError` with the code `canceled` will be thrown.
+> **NOTE**: With URLSession's asynchronous APIs, it is not necessary to check for cancellation since a `URLError` with the code `canceled` will be thrown.
 
 ### Task cancellation
 
@@ -59,7 +60,7 @@ class FoodViewModel: ObservableObject {
     private var task: Task<Void, Never>? // Reference to the loading task
 
     deinit {
-        task?.cancel() // Make sue the task is canceled if it is no longer needed
+        task?.cancel() // Make sure the task is canceled if it is no longer needed
     }
 
     func displayVegetable(id: String) {
@@ -209,7 +210,9 @@ class FoodViewModel: ObservableObject {
 
 In this article, we explored how we could improve the ergonomics of task cancellation by using `AnyCancellable` from Combine. By using it as a cancellation handler, we were able to link the lifecycle of a task to the lifecycle of its view model. It also allowed us to use the same cancellation reference for alternating tasks without requiring explicit cancellation. Finally, we created a way to conveniently store multiple task cancellation handlers in a single set and even mix and match them with publisher subscriptions.
 
-I hope you found this article useful. If you have any comments or feedback, please feel free write me on [Twitter](https://twitter.com/mIaIrIk). Thanks for reading!
+I hope you found this article useful. If you have any comments or feedback, please feel free to write me on [Twitter](https://twitter.com/mIaIrIk). Thanks for reading!
+
+***
 
 ### Appendix
 

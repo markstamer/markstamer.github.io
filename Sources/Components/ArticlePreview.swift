@@ -18,12 +18,19 @@ struct ArticlePreview: Component {
                 Badge(tag)
                     .role(.success)
                     .badgeStyle(.subtle)
-                    .margin(.trailing, .medium)
                     .verticalAlignment(.center)
                     .margin(.bottom, 4)
             }
 
+            Image(systemName: "dot")
+                .padding(.horizontal, .small)
+
             content.date.formatted(date: .abbreviated, time: .omitted)
+
+            Image(systemName: "dot")
+                .padding(.horizontal, .small)
+
+            "\(content.estimatedReadingMinutes) min read"
         }
         .font(.title5)
         .fontWeight(.light)

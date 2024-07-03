@@ -5,7 +5,7 @@ struct Article: ContentPage {
     func body(content: Content, context: PublishingContext) -> [any BlockElement] {
         Group {
             Text(content.title)
-                .font(.title1)
+                .font(.title2)
 
             Text {
                 for tag in content.tags {
@@ -25,21 +25,49 @@ struct Article: ContentPage {
                     .padding(.horizontal, .small)
 
                 "\(content.estimatedReadingMinutes) min read"
+
             }
             .font(.title5)
             .fontWeight(.light)
-            .padding(.vertical, .medium)
+            .margin(.vertical, .medium)
+
+            if let (externalSource, externalLink) = content.exteneralLink {
+                Link(target: "\(externalLink)") {
+                    Text("Read on \(externalSource)")
+                        .fontWeight(.light)
+                }
+                .role(.dark)
+                .linkStyle(.hover)
+                .relationship(.external)
+            }
 
             if let image = content.image {
                 Image(image, description: content.imageDescription)
                     .resizable()
                     .cornerRadius(20)
                     .aspectRation(3.5, contentMode: .fill)
-                    .padding(.vertical, .medium)
+                    .margin(.vertical, .large)
             }
 
             Text(content.body)
         }
-        .frame(maxWidth: .containerWidth(.large))
+        .frame(maxWidth: .containerWidth(.medium))
+    }
+}
+
+extension Content {
+    public var exteneralLink: (source: String, link: String)? {
+        guard let string = metadata["externalLink"] as? String else {
+            return nil
+        }
+        let array = string.components(separatedBy: " ")
+        guard
+            array.count == 2,
+            let source = array.first,
+            let link = array.last
+        else {
+            return nil
+        }
+        return (source, link)
     }
 }
