@@ -18,7 +18,7 @@ struct PortfolioSite: Site {
     var name = "Mark Stamer's Developer Profile"
     var baseTitle = ""
     var author = "Mark Stamer"
-    var url = URL(string: "https://www.example.com")!
+    var url = URL(string: "markstamer.github.io")!
 
     var pageWidth = 12
     var builtInIconsEnabled = true
