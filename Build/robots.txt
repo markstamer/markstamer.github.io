@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: markstamer.github.io/sitemap.xml
+Sitemap: https://markstamer.github.io/sitemap.xml
