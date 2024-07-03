@@ -26,10 +26,14 @@ struct PortfolioSite: Site {
 
     var syntaxHighlighters = [SyntaxHighlighter.swift]
     var homePage = Home()
-    var theme = MyTheme()
+    var theme = MainTheme()
 
     var layouts: [any ContentPage] = [
         Article()
+    ]
+
+    var pages: [any StaticPage] = [
+        Imprint()
     ]
 }
 
