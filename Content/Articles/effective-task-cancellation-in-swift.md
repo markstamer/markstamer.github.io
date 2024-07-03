@@ -2,7 +2,7 @@
 author: Mark Stamer
 layout: Article
 tags: async/await
-image: /images/articles/AnyCancellable.jpeg
+image: /images/articles/any-cancellable.jpeg
 externalLink: Medium https://medium.com/mobimeo-technology/effective-task-cancellation-in-swift-by-leveraging-combines-anycancellable-7814b50fc8c8
 date: 2023-06-23 9:30
 ---
