@@ -1,0 +1,165 @@
+<!doctype html><html lang="en" data-bs-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="When I first saw async/await Swift code, I was amazed at how elegant and concise it was. In practice, however, I often found that I had to wrap asynchronous functions in a Task to be able to cancel them. This meant keeping a reference to each individual task, which can quickly become tedious, especially since they involve generics. In this article I will explore ways to improve the ergonomics of task cancellation by leveraging Combine’s AnyCancellable."><meta name="author" content="Mark Stamer"><meta name="generator" content="Ignite v0.1.0"><title>Effective Task cancellation in Swift by leveraging Combine’s AnyCancellable</title><link href="markstamer.github.io/css/bootstrap.min.css" rel="stylesheet"><link href="markstamer.github.io/css/prism-default-dark.css" rel="stylesheet"><link href="markstamer.github.io/css/bootstrap-icons.min.css" rel="stylesheet"><link href="markstamer.github.io/articles/effective-task-cancellation-in-swift" rel="canonical"><meta property="og:site_name" content="Mark Stamer's Developer Profile"><meta property="og:image" content="/images/articles/AnyCancellable.jpeg"><meta property="twitter:image" content="/images/articles/AnyCancellable.jpeg"><meta property="og:title" content="Effective Task cancellation in Swift by leveraging Combine’s AnyCancellable"><meta property="twitter:title" content="Effective Task cancellation in Swift by leveraging Combine’s AnyCancellable"><meta property="og:description" content="Effective Task cancellation in Swift by leveraging Combine’s AnyCancellable"><meta name="twitter:description" content="Effective Task cancellation in Swift by leveraging Combine’s AnyCancellable"><meta property="og:url" content="markstamer.github.io/articles/effective-task-cancellation-in-swift"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:dnt" content="on"></head><body><div class="col-sm-12 mx-auto"><header><nav class="mx-auto navbar navbar-expand-md" style="max-width: 960px" data-bs-theme="light"><div class="container-fluid col"><a href="markstamer.github.io/" class="navbar-brand"><h1></h1></a><button type="button" class="navbar-toggler btn" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div id="navbarCollapse" class="collapse navbar-collapse"><ul class="navbar-nav mb-2 mb-md-0 col justify-content-end"><li class="nav-item"><a href="markstamer.github.io/#WorkSection" class="nav-link"><p class="lead">work</p></a></li><li class="nav-item"><a href="#" class="nav-link"><p class="lead">exploration</p></a></li><li class="nav-item"><a href="markstamer.github.io/#ArticleSection" class="nav-link"><p class="lead">articles</p></a></li></ul></div></div></nav></header><div class="mx-auto" style="max-width: 720px"><h2>Effective Task cancellation in Swift by leveraging Combine’s AnyCancellable</h2><h5 class="my-3" style="font-weight: 300"><span class="badge bg-success-subtle text-success-emphasis rounded-pill" style="vertical-align: middle; margin-bottom: 4px">async/await</span><i class="bi-dot" class="px-2"></i>Jun 23, 2023<i class="bi-dot" class="px-2"></i>6 min read</h5><a href="https://medium.com/mobimeo-technology/effective-task-cancellation-in-swift-by-leveraging-combines-anycancellable-7814b50fc8c8" rel="external" class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover"><p style="font-weight: 300">Read on Medium</p></a><div class="ratio my-4" style="--bs-aspect-ratio: 28.571428571428573%"><img src="markstamer.github.io/images/articles/AnyCancellable.jpeg"  class="img-fluid object-fit-cover" style="border-radius: 20px"alt=""/></div><p><p>When I first saw async/await Swift code, I was amazed at how elegant and concise it was. In practice, however, I often found that I had to wrap asynchronous functions in a <code>Task</code> to be able to cancel them. This meant keeping a reference to each individual task, which can quickly become tedious, especially since they involve generics. In this article I will explore ways to improve the ergonomics of task cancellation by leveraging Combine’s <code>AnyCancellable</code>.</p><h3>Cancellation in Swift concurrency</h3><p>Before we get into the weeds, let’s briefly recap how cancellation in Swift concurrency works. The <a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/">Swift Programming Language</a> book states that Swift concurrency uses a cooperative cancellation model. This means that although all child tasks will be informed when their parent task has been canceled, they still continue to run. A task can check whether it has been canceled by either calling <code>try Task.checkCancellation()</code>, which raises a <code>CancellationError</code>, or by checking the value of <code>Task.isCanceled</code> to return a partial result or a fallback value. Lastly, a task can be canceled by calling the <code>cancel()</code> method on it.</p><blockquote><p><strong>NOTE</strong>: With URLSession’s asynchronous APIs, it is not necessary to check for cancellation since a <code>URLError</code> with the code <code>canceled</code> will be thrown.</p></blockquote><h3>Task cancellation</h3><p>Lets look at a simple example of task cancellation. The below view model can load a model from the network and expose different states through a published state property:</p><pre><code class="language-swift">class FoodViewModel: ObservableObject {
+    enum State {
+        case idle, loading, vegetable(Vegetable), error(Error)
+    }
+
+    @Published private(set) var state: State = .idle
+
+    private let networkService: NetworkService
+
+    init(networkService: NetworkService) {
+        self.networkService = networkService
+    }
+
+    func displayVegetable(id: String) async {
+        do {
+            state = .loading
+            state = try await .vegetable(loadVegetable(id: id))
+        } catch let error as URLError where error.code == .cancelled {
+            state = .idle
+        } catch {
+            state = .error(error)
+        }
+    }
+
+    private func loadVegetable(id: String) async throws -> Vegetable {
+        try await networkService.request(endpoint: .vegetable(id: id))
+    }
+}
+</code></pre><p>If this view model were to control a SwiftUI view and your app supports iOS 15.0+, the best approach is probably to call <code>displayVegetable()</code> from within SwiftUI’s task modifier. It is called when the view first appears and is marked as canceled when the view is no longer displayed on screen. I suppose we could write our own task <code>ViewModifier</code> which starts a task in <code>onAppear</code> and cancels it again in <code>onDisappear</code> , but let’s look at ways to manually control the task lifetime instead. While we could expose a cancel method to the view that is called in <code>onDisappear</code>, arguably a more elegant approach is to tie the lifetime of the task to that of the view model:</p><pre><code class="language-swift">class FoodViewModel: ObservableObject {
+    ... 
+  
+    private var task: Task<Void, Never>? // Reference to the loading task
+
+    deinit {
+        task?.cancel() // Make sure the task is canceled if it is no longer needed
+    }
+
+    func displayVegetable(id: String) {
+        task = Task { @MainActor [weak self] in
+            guard let self else { return } // Captures self and prevents deinit before task is finished
+            do {
+                self.state = .loading
+                self.state = try await .vegetable(self.loadVegetable(id: id))
+            } catch ... {
+                ...
+            }
+        }
+    }
+  
+    ...
+}
+</code></pre><p>As you can see it get’s a little bit more involved. We now have to keep a reference of the task and make sure we cancel the task when the view model is de-initialized. However, there is only one problem with this code, <code>deinit</code> is not called. This is because we create a reference cycle by capturing a strong reference to <code>self</code> in the task’s closure in the <code>guard self</code> statement. Lets fix that by shaking off our guard-self-dance habit and guard the statement in the suspension point instead.</p><pre><code class="language-swift">class FoodViewModel: ObservableObject {
+    ... 
+  
+    private var task: Task<Void, Never>?
+
+    deinit {
+        task?.cancel()
+    }
+
+    func displayVegetable(id: String) {
+        task = Task { @MainActor [weak self] in
+            do {
+                self?.state = .loading
+                guard let vegetable = try await self?.loadVegetable(id: id) else {
+                    return
+                }
+                self?.state = .vegetable(vegetable)
+            } catch ... {
+                ...
+            }
+        }
+    }
+}
+</code></pre><h3>Single task cancellation using <code>AnyCancellable</code></h3><p>After having worked with Combine for a while, I was intuitively looking for something similar to <code>AnyCancellable</code> . It has the advantage of being automatically canceled by calling its cancel function as soon as there is no more reference to it. Let’s create a simple extension on <code>Task</code> to make use of this.</p><pre><code class="language-swift">import Combine
+
+extension Task {
+  func eraseToAnyCancellable() -> AnyCancellable {
+        AnyCancellable(cancel)
+    }
+}
+</code></pre><p>If you don’t use Combine in your App und you find it overkill to import it, you could easily create your own <code>AnyCancallable</code> class to provide the same cancellation functionality (see Appendix). With this in place we can omit the <code>deinit</code>and store an <code>AnyCancellable</code> instead of the task.</p><pre><code class="language-swift">class FoodViewModel: ObservableObject {
+    ... 
+  
+    private var cancellable: AnyCancellable?
+
+    func displayVegetable(id: String) {
+        cancellable = Task { @MainActor [weak self, networkService] in
+            ...
+        }.eraseToAnyCancellable()
+    }
+  
+    ...
+}
+</code></pre><p>Another advantage of this approach is the ability to always use the same reference when you have requests that alternate. Let’s assume we have another function called <code>displayFruit(id:)</code> . If your view is only able to display either a fruit or vegetable you can use the same reference for both, and don’t need to worry about cancelling the previous task.</p><pre><code class="language-swift">class FoodViewModel: ObservableObject {
+    ... 
+  
+    private var cancellable: AnyCancellable?
+
+    // Canceled automatically if a fruit is requested
+    func displayVegetable(id: String) {
+        cancellable = Task { @MainActor [weak self, networkService] in
+            ...
+        }.eraseToAnyCancellable()
+    }
+
+   // Canceled automatically if a vegetable is requested
+    func displayFruit(id: String) {
+        cancellable = Task { @MainActor [weak self, networkService] in
+            ...
+        }.eraseToAnyCancellable()
+    }
+  
+    ...
+}
+</code></pre><h3>Cancelling multiple tasks</h3><p>Now that we have our first Combine-like API, we can take the next obvious step by introducing a function analogous to Combine’s <code>store(in: Set<AnyCancellable>)</code>.</p><pre><code class="language-swift">import Combine
+
+extension Task {
+    func store(in set: inout Set<AnyCancellable>) {
+        set.insert(AnyCancellable(cancel))
+    }
+}
+</code></pre><p>I personally love the simplicity of this syntax. It allows us to tie the lifecycle of multiple tasks to a single reference. And the best part is, it can be used alongside with publisher subscriptions as well. For example, if we go back to our single vegetable request scenario where, which is tied to the views lifecycle and we want to observe our apps user login state, we can conveniently store both cancellation handlers in a single set.</p><pre><code class="language-swift">class FoodViewModel: ObservableObject {
+    ... 
+  
+    private var cancellables: Set<AnyCancellable> = []
+
+    init(networkService: NetworkService, userModule: UserModule) {
+      self.networkService = networkService
+      
+      userModule.isLoggedInPublisher.sink { isLoggedIn in
+          ...
+      }
+      .store(in: &cancellables)
+    }
+
+    func displayVegetable(id: String) {
+        Task { @MainActor [weak self, networkService] in
+            ...
+        }.store(in: &cancellables)
+    }
+  
+    ...
+}
+</code></pre><h3>Conclusion</h3><p>In this article, we explored how we could improve the ergonomics of task cancellation by using <code>AnyCancellable</code> from Combine. By using it as a cancellation handler, we were able to link the lifecycle of a task to the lifecycle of its view model. It also allowed us to use the same cancellation reference for alternating tasks without requiring explicit cancellation. Finally, we created a way to conveniently store multiple task cancellation handlers in a single set and even mix and match them with publisher subscriptions.</p><p>I hope you found this article useful. If you have any comments or feedback, please feel free to write me on <a href="https://twitter.com/mIaIrIk">Twitter</a>. Thanks for reading!</p><hr /><h3>Appendix</h3><pre><code class="language-swift">final class AnyCancellable: Hashable {
+
+    private let cancel: () -> Void
+
+    init(_ cancel: @escaping () -> Void) {
+        self.cancel = cancel
+    }
+
+    deinit {
+        cancel()
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
+
+    static func == (lhs: AnyCancellable, rhs: AnyCancellable) -> Bool {
+        ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+    }
+}
+</code></pre></p></div><p class="text-center mt-5">Created with <a href="https://github.com/twostraws/Ignite">Ignite</a></p></div><script src="markstamer.github.io/js/bootstrap.bundle.min.js"></script><script src="markstamer.github.io/js/syntax-highlighting.js"></script></body></html>
