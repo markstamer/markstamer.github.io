@@ -20,12 +20,12 @@ struct Home: StaticPage {
         workSection
             .frame(maxWidth: .containerWidth(.large))
             .margin(.top, "80px")
-            .id("WorkSection")
+            .id("work")
 
         articleSection(context.allContent)
             .frame(maxWidth: .containerWidth(.large))
             .margin(.top, "80px")
-            .id("ArticleSection")
+            .id("articles")
 
     }
 }
