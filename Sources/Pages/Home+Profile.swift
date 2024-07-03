@@ -42,7 +42,7 @@ extension Home {
     }
 
     fileprivate var profileImage: some BlockElement {
-            Image(decorative: "/images/Profile-close.jpeg")
+            Image(decorative: "images/profile.jpeg")
                 .resizable()
                 .cornerRadius(8)
                 .aspectRation(.square, contentMode: .fill)
