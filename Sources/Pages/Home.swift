@@ -2,7 +2,7 @@ import Foundation
 import Ignite
 
 struct Home: StaticPage {
-    var title = "Home"
+    var title = "Mark Stamer"
 
     func body(context: PublishingContext) -> [BlockElement] {
         Spacer(size: .extraLarge)

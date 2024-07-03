@@ -92,10 +92,11 @@ struct WorkCard: Component {
                     Item(Text("Key Contributions")
                         .font(.title5)
                         .fontWeight(.regular)
-                        .margin(.bottom, -2)) {
-                            Text(markdown: keyFeaturesMarkdown)
-                        }
-                        .style("border: none")
+                        .margin(.bottom, -2)
+                    ) {
+                        Text(markdown: keyFeaturesMarkdown)
+                    }
+                    .style("border: none")
                 }
                 .margin(.top, .large)
             }

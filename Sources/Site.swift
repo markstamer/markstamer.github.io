@@ -14,11 +14,12 @@ struct IgniteWebsite {
     }
 }
 
-struct PortfolioSite: Site {    
+struct PortfolioSite: Site {
     var name = "Mark Stamer's Developer Profile"
     var baseTitle = ""
     var author = "Mark Stamer"
     var url = URL(string: "https://markstamer.github.io")!
+    var favicon = URL(string: "images/favicon-32x32.png")
 
     var pageWidth = 12
     var builtInIconsEnabled = true
