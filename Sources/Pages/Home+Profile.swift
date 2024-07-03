@@ -75,6 +75,15 @@ enum ContentMode {
     }
 }
 
+extension BlockElement where Self == Image {
+    func aspectRation(_ ratio: AspectRatio, contentMode: ContentMode) -> some BlockElement {
+        Group {
+            self.class(contentMode.htmlClass)
+        }
+        .aspectRatio(ratio)
+    }
+}
+
 protocol MediaContent: BlockElement { }
 extension Image: MediaContent { }
 extension Video: MediaContent { }

@@ -102,7 +102,6 @@ struct WorkCard: Component {
             .margin(.top, .large)
         }
         .style("border: none")
-        .background(.white.opacity(0))
         .shadow(.black.opacity(0.1), radius: 8)
     }
 }
