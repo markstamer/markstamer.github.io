@@ -36,7 +36,7 @@ struct Footer: Component {
                     .role(.secondary)
                     .linkStyle(.hover)
                 " using "
-                Image(decorative: "images/swift_logo_white.svg")
+                Image(decorative: "/images/swift_logo_white.svg")
                     .resizable()
                     .frame(height: "1.4em")
                     .margin(.bottom, -2)
