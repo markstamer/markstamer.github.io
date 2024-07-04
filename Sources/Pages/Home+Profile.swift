@@ -2,30 +2,22 @@ import Ignite
 
 extension Home {
 
-    var profileSection: Section {
-        Section {
+    var profileSection: some BlockElement {
+        Group {
             introText
-                .frame(maxWidth: .containerWidth(.small), alignment: .leading)
-                .width(9)
+                .frame(maxWidth: .containerWidth(.medium), alignment: .leading)
 
-            Group {
-                profileImage
-                Spacer(size: .large)
-                socials
-            }
-            .horizontalAlignment(.center)
-            .frame(maxWidth: 160)
-            .margin(.top, .large)
-            .width(3)
+            Spacer(size: .extraLarge)
+
+            tagSection
         }
-        .verticalContainerAlignment(.top)
     }
 
     fileprivate var introText: some BlockElement {
         Group {
-            Text("Hi, I'm Mark!")
-                .font(.title2)
-                .fontWeight(.regular)
+            Text("Hi, I'm Mark. 👋")
+                .font(.title1)
+                .foregroundStyle(.secondary)
                 .margin(.bottom, .large)
 
             Text("iOS Developer | SwiftUI Enthusiast | Medical Engineering PhD")
@@ -41,65 +33,29 @@ extension Home {
         }
     }
 
-    fileprivate var profileImage: some BlockElement {
-            Image(decorative: "images/profile.jpeg")
-                .resizable()
-                .cornerRadius(8)
-                .aspectRation(.square, contentMode: .fill)
-    }
+    fileprivate var tagSection: Section {
+        Section {
+            Card.badgeCard(
+                title: "Field Experience",
+                badges: ["Urban Mobility", "Coral Restoration", "Medical Engineering"],
+                role: .primary
+            )
+            .width(3)
 
-    fileprivate var socials: some BlockElement {
-        Text {
-            let socials: [(image: String, target: String)] = [
-                ("linkedin", "https://www.linkedin.com/in/mark-stamer/"),
-                ("github", "https://github.com/markstamer/"),
-                ("twitter", "https://x.com/mIaIrIk")
-            ]
 
-            for social in socials {
-                Link(Image(systemName: social.image), target: social.target)
-                    .role(.secondary)
-                    .padding(.small)
-                    .relationship(.noOpener, .noReferrer)
-            }
+            Card.badgeCard(
+                title: "Knowledge",
+                badges: ["Swift", "SwiftUI", "UIKit", "async/await", "Combine", "MapKit", "CoreLocation", "SwiftPM", "..."],
+                role: .success
+            )
+            .width(4)
+
+            Card.badgeCard(
+                title: "Favorite Creators",
+                badges: ["Majid Jabrayilov", "Paul Hudson", "Sarun W.", "Chris Eidhof", "Javier (swiftui-lab)", "John Sundell", "Soroush Khanlou", "Janum Trivedi"],
+                role: .warning
+            )
+            .width(5)
         }
-        .font(.title3)
-    }
-}
-
-enum ContentMode {
-    case fit, fill
-
-    var htmlClass: String {
-        "object-fit-\(self == .fill ? "cover" : "contain")"
-    }
-}
-
-extension BlockElement where Self == Image {
-    func aspectRation(_ ratio: AspectRatio, contentMode: ContentMode) -> some BlockElement {
-        Group {
-            self.class(contentMode.htmlClass)
-        }
-        .aspectRatio(ratio)
-    }
-}
-
-protocol MediaContent: BlockElement { }
-extension Image: MediaContent { }
-extension Video: MediaContent { }
-
-extension MediaContent {
-    func aspectRation(_ ratio: AspectRatio, contentMode: ContentMode) -> some BlockElement {
-        Group {
-            self.class(contentMode.htmlClass)
-        }
-        .aspectRatio(ratio)
-    }
-
-    func aspectRation(_ ratio: Double, contentMode: ContentMode) -> some BlockElement {
-        Group {
-            self.class(contentMode.htmlClass)
-        }
-        .aspectRatio(ratio)
     }
 }

@@ -5,27 +5,21 @@ struct Home: StaticPage {
     var title = "Mark Stamer"
 
     func body(context: PublishingContext) -> [BlockElement] {
-        Spacer(size: .extraLarge)
+        Group {
+            Spacer(size: .extraLarge)
 
-        profileSection
-            .frame(maxWidth: .containerWidth(.large))
+            profileSection
 
-        Spacer(size: .extraLarge)
+            Spacer(size: .extraLarge)
 
-        tagSection
-            .frame(maxWidth: .containerWidth(.large))
+            workSection
+                .margin(.top, "80px")
+                .id("work")
 
-        Spacer(size: .extraLarge)
-
-        workSection
-            .frame(maxWidth: .containerWidth(.large))
-            .margin(.top, "80px")
-            .id("work")
-
-        articleSection(context.allContent)
-            .frame(maxWidth: .containerWidth(.large))
-            .margin(.top, "80px")
-            .id("articles")
-
+            articleSection(context.allContent)
+                .margin(.top, "80px")
+                .id("articles")
+        }
+        .frame(maxWidth: .containerWidth(.large))
     }
 }
