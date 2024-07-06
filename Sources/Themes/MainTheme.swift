@@ -18,12 +18,15 @@ struct MainTheme: Theme {
                 .position(.default)
                 .frame(maxWidth: .containerWidth(.large))
 
-                page.body
+                Group {
+                    page.body
 
-                Divider()
-                    .frame(maxWidth: .containerWidth(.large))
+                    Divider()
 
-                Footer()
+                    Footer()
+                }
+                .frame(maxWidth: .containerWidth(.large))
+                .padding(.horizontal, .medium)
             }
         }
     }
