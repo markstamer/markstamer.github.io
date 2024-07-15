@@ -45,7 +45,7 @@ struct Article: ContentPage {
                 Image(image, description: content.imageDescription)
                     .resizable()
                     .cornerRadius(20)
-                    .aspectRation(3.5, contentMode: .fill)
+                    .aspectRatio(3.5, contentMode: .fill)
                     .margin(.vertical, .large)
             }
 

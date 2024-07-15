@@ -6,6 +6,6 @@ extension Image {
         Image(decorative: "/images/profile.jpeg")
             .resizable()
             .cornerRadius(8)
-            .aspectRation(.square, contentMode: .fill)
+            .aspectRatio(.square, contentMode: .fill)
     }
 }
