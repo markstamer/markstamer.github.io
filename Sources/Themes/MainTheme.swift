@@ -14,7 +14,6 @@ struct MainTheme: Theme {
                     Link(Text("articles").font(.lead), target: "/#articles")
                 }
                 .navigationItemAlignment(.trailing)
-                .navigationBarStyle(.light)
                 .position(.default)
                 .frame(maxWidth: .containerWidth(.large))
 
@@ -28,6 +27,7 @@ struct MainTheme: Theme {
                 .frame(maxWidth: .containerWidth(.large))
                 .padding(.horizontal, .medium)
             }
+            .colorScheme(.light)
         }
     }
 }
