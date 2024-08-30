@@ -11,7 +11,11 @@ struct Home: StaticPage {
         workSection
             .padding(.vertical, .extraLarge)
             .id("work")
-        
+
+        projectsSection
+            .padding(.vertical, .extraLarge)
+            .id("projects")
+
         articleSection(context.allContent)
             .padding(.vertical, .extraLarge)
             .id("articles")
