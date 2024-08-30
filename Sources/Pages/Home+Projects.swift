@@ -26,7 +26,7 @@ extension Home {
                             .fontWeight(.semibold)
                             .linkStyle(.hover)
                             .role(.warning)
-                        ", an open-source static site builder. Ignite enables users to create websites in Swift using a SwiftUI-like syntax. I quickly decided to try it out and soon began contributing to the project. My website is published using GitHub Pages. You can checkout the source code "
+                        ", an open-source static site builder. Ignite enables you to create websites in Swift using a SwiftUI-like syntax. I quickly decided to go with it and soon began contributing to the project. My site is published using GitHub Pages. You can checkout the source code "
                         Link(" here", target: "https://github.com/markstamer/markstamer.github.io")
                             .fontWeight(.semibold)
                             .linkStyle(.hover)
