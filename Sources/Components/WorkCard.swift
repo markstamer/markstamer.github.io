@@ -8,7 +8,7 @@ struct WorkCard: Component {
     let title: String
     let image: String
     let imageLayout: WorkCardImagePlacement
-    let description: String
+    let description: Text
     let keyFeaturesMarkdown: String
     let techBadges: [String]
 
@@ -19,7 +19,7 @@ struct WorkCard: Component {
                     Text(title)
                         .font(.title3)
 
-                    Text(description)
+                    description
                 }
                     .width(6)
 
