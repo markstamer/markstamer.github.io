@@ -35,6 +35,7 @@ struct WorkCard: Component {
                             HideBoxShadow()
                         }
                     }
+                    .style("cursor: pointer")
                     .onClick {
                         ShowModal(id: self.image)
                     }
