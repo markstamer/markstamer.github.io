@@ -25,6 +25,7 @@ struct Footer: Component {
 
                 // Legal notice
                 Link("Legal notice", target: Imprint())
+                    .fontWeight(.semibold)
                     .role(.secondary)
                     .linkStyle(.hover)
 
@@ -33,6 +34,7 @@ struct Footer: Component {
                 // Create with Ignite
                 " Created with "
                 Link("Ignite", target: URL("https://github.com/twostraws/Ignite"))
+                    .fontWeight(.semibold)
                     .role(.secondary)
                     .linkStyle(.hover)
                 " using "
