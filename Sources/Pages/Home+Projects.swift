@@ -32,7 +32,8 @@ extension Home {
                             .linkStyle(.hover)
                             .role(.warning)
                         "."
-                    }
+                    },
+                    enableImageModal: false
                 )
                 .width(6)
 
