@@ -26,20 +26,9 @@ struct WorkCard: Component {
                 let image = Image(decorative: image)
                     .resizable()
                     .frame(minWidth: .containerWidth(.xxs))
-                    .background(.black.opacity(0.02))
                     .cornerRadius(6)
-                    .onHover { isHovering in
-                        if isHovering {
-                            ShowBoxShadow()
-                        } else {
-                            HideBoxShadow()
-                        }
-                    }
-                    .style("cursor: pointer")
-                    .onClick {
-                        ShowModal(id: self.image)
-                    }
                     .width(6)
+                    .enlargeableViaModalPresentation(name: image)
 
                 switch imageLayout {
                 case .left:
@@ -51,25 +40,6 @@ struct WorkCard: Component {
 
                 }
             }
-
-            Modal(id: image) {
-                Group {
-                    Image(systemName: "x-lg")
-                        .resizable()
-                        .frame(width: 36, height: 36)
-                }
-                .class("position-absolute top-0 end-0")
-                .margin(.large)
-                .onClick {
-                    DismissModal(id: image)
-                }
-
-                Image(decorative: image)
-                    .resizable()
-                    .background(.black.opacity(0.03))
-                    .cornerRadius(6)
-            }
-            .size(.xLarge)
 
             Group {
                 Group {
