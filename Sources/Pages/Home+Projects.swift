@@ -35,6 +35,13 @@ extension Home {
                     }
                 )
                 .width(6)
+
+                Card.projectCard(
+                    image: "/images/projects/ar-hackathon.png",
+                    title: "AR-based Vehicle Discovery Hackathon",
+                    text: Text("Locating shared vehicles on the street, especially scooters and bikes, can be challenging as they are often hidden behind cars. During a 2023 hackathon at Mobimeo, I collaborated with Daniel Büker (Design), Meik Mense-Koch (Design), and Metin Güler (iOS) to build an iOS prototype that used augmented reality (AR) to make these vehicles more visible. When the user looked down at the phone, they would see a conventional map, but when the phone was held upright, a camera view would appear, displaying the vehicles as AR objects floating above the ground. It was exciting to explore this concept, but we quickly discovered that the GPS accuracy of the scooters was insufficient. Additionally, AR-based navigation proved to be a complex task and is already a well-developed feature in both Apple and Google Maps.")
+                )
+                .width(6)
             }
         }
     }

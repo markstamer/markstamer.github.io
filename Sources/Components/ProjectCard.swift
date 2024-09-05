@@ -16,6 +16,7 @@ extension Card {
         }
         .style("border: none")
         .shadow(.black.opacity(0.1), radius: 8)
+        .margin(.bottom, .large)
     }
 }
 
